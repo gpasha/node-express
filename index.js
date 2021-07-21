@@ -1,5 +1,8 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
+const home = require('./routers/home')
+const add = require('./routers/add')
+const courses = require('./routers/courses')
 const app = express()
 
 const hbs = exphbs.create({
@@ -13,26 +16,11 @@ app.set('views', 'views')
 
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
-    res.render('index', {
-        title: 'Home page',
-        isHome: true
-    })
-})
+app.use('/', home)
+app.use('/add', add)
+app.use('/courses', courses)
 
-app.get('/add', (req, res) => {
-    res.render('add', {
-        title: 'Create a course',
-        isAdd: true
-    })
-})
 
-app.get('/courses', (req, res) => {
-    res.render('courses', {
-        title: "Courses",
-        isCourses: true
-    })
-})
 
 
 
