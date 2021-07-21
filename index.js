@@ -15,6 +15,7 @@ app.set('view engine', 'hbs')
 app.set('views', 'views')
 
 app.use(express.static('public'))
+app.use(express.urlencoded({extended: true})) // to get data for POST method
 
 app.use('/', home)
 app.use('/add', add)
