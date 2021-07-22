@@ -1,1 +1,33 @@
 <h1>Basket</h1>
+
+<div class="card">
+
+    {{#if courses.length}}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Count</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each courses}}
+                    <tr>
+                        <td>{{title}}</td>
+                        <td>{{count}}</td>
+                        <td>
+                            <buttom class="btn btn-primary">Remove</buttom>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <p>
+            <strong>Total Price: </strong>
+            <span class="price">{{price}}</span>
+        </p>
+    {{else}}
+        <p>The Basket is empty</p>
+    {{/if}}
+</div>

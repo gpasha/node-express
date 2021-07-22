@@ -1,4 +1,1 @@
-{
-    "courses": [],
-    "price": 0
-}
+{"courses":[{"title":"Angular","price":"450","img":"https://miro.medium.com/max/1400/0*hiB1lYXjADVPxcjh.png","id":"f08226a6-19c3-4bf8-aedf-e1f97ce37da2","count":2},{"title":"React","price":"420","img":"https://reactjs.org/logo-og.png","id":"8a183f99-ca8c-4073-8d56-0f07c07ef4cb","count":1}],"price":1320}
