@@ -1,6 +1,6 @@
 <h1>Basket</h1>
 
-<div class="card">
+<div id="card">
 
     {{#if courses.length}}
         <table>
@@ -17,7 +17,7 @@
                         <td>{{title}}</td>
                         <td>{{count}}</td>
                         <td>
-                            <buttom class="btn btn-primary">Remove</buttom>
+                            <buttom class="btn btn-primary js-remove" data-id={{id}}>Remove</buttom>
                         </td>
                     </tr>
                 {{/each}}
