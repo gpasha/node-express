@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars')
 const home = require('./routers/home')
 const add = require('./routers/add')
 const courses = require('./routers/courses')
+const card = require('./routers/card')
 const app = express()
 
 const hbs = exphbs.create({
@@ -20,6 +21,7 @@ app.use(express.urlencoded({extended: true})) // to get data for POST method
 app.use('/', home)
 app.use('/add', add)
 app.use('/courses', courses)
+app.use('/card', card)
 
 
 

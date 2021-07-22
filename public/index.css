@@ -25,3 +25,9 @@
 .course .price.big {
     font-size: 2.5rem;
 }
+
+.buy-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
