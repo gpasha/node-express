@@ -24,6 +24,10 @@
     
     <input type="hidden" name="id" value={{course.id}}>
     <div class="row">
-        <button class="btn btn-primary">Edit Course</button>
+        <button type="submit" class="btn btn-primary">Edit Course</button>
     </div>
+</form>
+<form action="/courses/remove" method="POST">
+    <input type="hidden" name="id" value={{course.id}}>
+    <button type="submit" class="btn red">Remove the course</button>
 </form>
