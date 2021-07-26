@@ -6,6 +6,7 @@ const add = require('./routers/add')
 const courses = require('./routers/courses')
 const card = require('./routers/card')
 const User = require('./models/user')
+const orders = require('./routers/orders')
 
 /* START new setting express-handlebars */
 const Handlebars = require('handlebars')
@@ -42,6 +43,7 @@ app.use('/', home)
 app.use('/add', add)
 app.use('/courses', courses)
 app.use('/card', card)
+app.use('/orders', orders)
 
 
 
