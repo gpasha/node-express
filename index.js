@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const MongoStore = require('connect-mongodb-session')(session)
 const varMiddleware = require('./middleware/variables')
 const home = require('./routers/home')
 const add = require('./routers/add')
@@ -16,6 +17,8 @@ const Handlebars = require('handlebars')
 const expressHandlebars = require('express-handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
+const MONGODB_URI = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongodb.net/shop'
+
 const app = express();
 
 const hbs = expressHandlebars.create({
@@ -24,27 +27,23 @@ const hbs = expressHandlebars.create({
     handlebars: allowInsecurePrototypeAccess(Handlebars)
 })
 
+const store = MongoStore({
+    collection: 'sessions',
+    uri: MONGODB_URI
+})
+
 app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs');
 app.set('views', 'views')
 /* END new setting express-handlebars */
-
-app.use(async (req, res, next) => {
-    try {
-        const user = await User.findById('60fae0eb352b4537e0193484')
-        req.user = user
-        next()
-    } catch(e) {
-        console.log(e);
-    }
-})
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true})) // to get data for POST method
 app.use(session({
     secret: 'some secret key',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: store
 }))
 app.use(varMiddleware)
 
@@ -63,24 +62,11 @@ const PORT = process.env.PORT || 3000
 
 async function start() {
     try {
-        // const url = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-        const url = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongodb.net/shop'
-        await mongoose.connect(url, {
+        await mongoose.connect(MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false
         })
-        const candidate = await User.findOne()
-        if (!candidate) {
-            const user = new User({
-                email: 'g1ebikpasha@gmail.com',
-                name: 'Pavel',
-                cart: {
-                    items: []
-                }
-            })
-            await user.save()
-        }
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`)
         })

@@ -10,19 +10,23 @@
                    class="btn-floating halfway-fab waves-effect waves-light red">
                     <i style="font-size:14px;" class="material-icons">Open</i>
                 </a>
-                <a href="/courses/{{id}}/edit?allow=true" class="btn-floating halfway-fab waves-effect waves-light red">
-                    <i style="font-size:14px;" class="material-icons">Edit</i>
-                </a>
+                {{#if @root.isAuth}}
+                    <a href="/courses/{{id}}/edit?allow=true" class="btn-floating halfway-fab waves-effect waves-light red">
+                        <i style="font-size:14px;" class="material-icons">Edit</i>
+                    </a>
+                {{/if}}
             </div>
             <div class="card-content">
                 <span class="card-title">{{title}}</span>
                 <p class="price">{{price}}</p>
-                <form method="POST" action="/card/add">
-                    <input type="hidden" name="id" value={{id}}>
-                    <button type="submit" class="waves-effect waves-light btn buy-btn">
-                        Buy
-                    </button>
-                </form>
+                {{#if @root.isAuth}}
+                    <form method="POST" action="/card/add">
+                        <input type="hidden" name="id" value={{id}}>
+                        <button type="submit" class="waves-effect waves-light btn buy-btn">
+                            Buy
+                        </button>
+                    </form>
+                {{/if}}
             </div>
         </div>
         </div>
