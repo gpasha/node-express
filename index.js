@@ -1,12 +1,15 @@
 const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
+const session = require('express-session')
+const varMiddleware = require('./middleware/variables')
 const home = require('./routers/home')
 const add = require('./routers/add')
 const courses = require('./routers/courses')
 const card = require('./routers/card')
 const User = require('./models/user')
 const orders = require('./routers/orders')
+const auth = require('./routers/auth')
 
 /* START new setting express-handlebars */
 const Handlebars = require('handlebars')
@@ -38,12 +41,19 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true})) // to get data for POST method
+app.use(session({
+    secret: 'some secret key',
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(varMiddleware)
 
 app.use('/', home)
 app.use('/add', add)
 app.use('/courses', courses)
 app.use('/card', card)
 app.use('/orders', orders)
+app.use('/auth', auth)
 
 
 
