@@ -21,6 +21,7 @@
                 <p class="price">{{price}}</p>
                 {{#if @root.isAuth}}
                     <form method="POST" action="/card/add">
+                        <input type="hidden" name="_csrf" value="{{@root.csrf}}">
                         <input type="hidden" name="id" value={{id}}>
                         <button type="submit" class="waves-effect waves-light btn buy-btn">
                             Buy

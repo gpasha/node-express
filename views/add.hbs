@@ -20,7 +20,10 @@
             <label class="active" for="imgid">Image URL</label>
             <span class="helper-text" data-error="Please enter a course image url" data-success="right"></span>
         </div>
-    </div>    
+    </div>
+
+    <input type="hidden" name="_csrf" value="{{csrf}}">
+
     <div class="row">
         <button class="btn btn-primary">Create Course</button>
     </div>

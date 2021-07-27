@@ -6,7 +6,9 @@ const bcrypt = require('bcryptjs')
 router.get('/login', async (req, res) => {
     res.render('auth/login', {
         isLogin: true,
-        title: 'Autorization'
+        title: 'Autorization',
+        loginError: req.flash('loginError'),
+        registerError: req.flash('registerError')
     })
 })
 
@@ -30,9 +32,11 @@ router.post('/login', async (req, res) => {
                     res.redirect('/')
                 })
             } else {
+                req.flash('loginError', 'Not correct login or password!')
                 res.redirect('/auth/login#login')
             }
         } else {
+            req.flash('loginError', 'This user is not consist!')
             res.redirect('/auth/login#login')
         }
     } catch(e) {
@@ -46,6 +50,7 @@ router.post('/register', async (req, res) => {
         const condidate = await User.findOne({email})
     
         if (condidate) {
+            req.flash('registerError', 'This user is consist!')
             res.redirect('/auth/login#register')
         } else {
             const hashpassword = await bcrypt.hash(password, 10)
