@@ -2,6 +2,25 @@ const {Router} = require('express')
 const router = Router()
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
+const keys = require('../keys/index')
+const nodemailer = require('nodemailer')
+const registrationEmail = require('../emails/registration')
+
+let transporter = nodemailer.createTransport(
+    {
+        host: 'smtp.mail.ru',
+        port: 465,
+        secure: true,
+        auth: {
+            user: keys.EMAIL,
+            pass: keys.APPLICATION_PASSWORD_FROM_MAIL_RU
+        }
+    },
+    {
+        from: `From Node JS <${keys.EMAIL}>`
+    }
+)
+
 
 router.get('/login', async (req, res) => {
     res.render('auth/login', {
@@ -59,6 +78,8 @@ router.post('/register', async (req, res) => {
             })
             await user.save()
             res.redirect('/auth/login#login')
+            await transporter.sendMail(registrationEmail(user.email))
+
         }
     } catch(e) {
         console.log(e);

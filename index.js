@@ -1,4 +1,5 @@
 const express = require('express')
+const keys = require('./keys/index')
 const path = require('path')
 const csrf = require('csurf')
 const mongoose = require('mongoose')
@@ -19,9 +20,9 @@ const Handlebars = require('handlebars')
 const expressHandlebars = require('express-handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
-const MONGODB_URI = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongodb.net/shop'
-
 const app = express();
+
+const MONGODB_URI = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongodb.net/shop'
 
 const hbs = expressHandlebars.create({
     defaultLayout: 'main',
@@ -42,7 +43,7 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true})) // to get data for POST method
 app.use(session({
-    secret: 'some secret key',
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store
