@@ -16,6 +16,7 @@ const orders = require('./routers/orders')
 const auth = require('./routers/auth')
 const profile = require('./routers/profile')
 const errorHandler = require('./middleware/error')
+const fileMiddlewear = require('./middleware/file')
 
 /* START new setting express-handlebars */
 const Handlebars = require('handlebars')
@@ -44,6 +45,7 @@ app.set('views', 'views')
 /* END new setting express-handlebars */
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(express.urlencoded({extended: true})) // to get data for POST method
 app.use(session({
     secret: keys.SESSION_SECRET,
@@ -51,6 +53,8 @@ app.use(session({
     saveUninitialized: false,
     store: store
 }))
+
+app.use(fileMiddlewear.single('avatar'))
 
 app.use(csrf())
 app.use(flash())

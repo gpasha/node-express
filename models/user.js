@@ -9,6 +9,9 @@ const user = new Schema({
         type: String,
         required: true
     },
+    avatarUrl: {
+        type: String
+    },
     resetToken: {
         type: String
     },
