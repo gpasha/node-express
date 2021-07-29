@@ -1,6 +1,8 @@
 const {Router} = require('express')
 const crypto = require('crypto')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
+const {validationResult} = require('express-validator')
+const {registerValidators} = require('../utils/validators')
 const router = Router()
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
@@ -23,7 +25,6 @@ let transporter = nodemailer.createTransport(
         from: `From Node JS <${keys.EMAIL}>`
     }
 )
-
 
 router.get('/login', async (req, res) => {
     res.render('auth/login', {
@@ -66,10 +67,16 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', registerValidators, async (req, res) => {
     try {
         const {email, name, password, repeat} = req.body
         const condidate = await User.findOne({email})
+
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            req.flash('registerError', errors.array()[0].msg)
+            return res.status(422).redirect('/auth/login#register')
+        }
     
         if (condidate) {
             req.flash('registerError', 'This user is consist!')
