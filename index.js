@@ -14,6 +14,7 @@ const courses = require('./routers/courses')
 const card = require('./routers/card')
 const orders = require('./routers/orders')
 const auth = require('./routers/auth')
+const profile = require('./routers/profile')
 const errorHandler = require('./middleware/error')
 
 /* START new setting express-handlebars */
@@ -63,6 +64,7 @@ app.use('/courses', courses)
 app.use('/card', card)
 app.use('/orders', orders)
 app.use('/auth', auth)
+app.use('/profile', profile)
 
 
 app.use(errorHandler)

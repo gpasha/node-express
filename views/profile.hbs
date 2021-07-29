@@ -1,0 +1,33 @@
+<h1>Profile</h1>
+
+<div class="row">
+    <div class="col s6">
+        <img src="https://i.stack.imgur.com/l60Hf.png" alt="" class="avatar">
+        <p>no avatar</p>
+    </div>
+    <div class="col s6">
+        <form action="/profile" method="POST">
+            <p>Your email: <strong>{{user.email}}</strong></p>
+            <div class="input-field">
+                <input id="nameid" name="name" type="text" class="validate" required value={{user.name}}>
+                <label class="active" for="nameid">Course Name</label>
+                <span class="helper-text" data-error="Please enter your name" data-success="right"></span>
+            </div>
+
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Avatar</span>
+                    <input type="file" name="avatar">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
+
+            <input type="hidden" name="_csrf" value="{{csrf}}">
+            
+            <button type="submit" class="btn btn-primary">Change</button>
+            
+        </form>
+    </div>
+</div>
