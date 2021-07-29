@@ -27,7 +27,8 @@ const MONGODB_URI = 'mongodb+srv://g_pavel:36bCGx5i4gcEQA2@cluster0.dpa5t.mongod
 const hbs = expressHandlebars.create({
     defaultLayout: 'main',
     extname: 'hbs',
-    handlebars: allowInsecurePrototypeAccess(Handlebars)
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    helpers: require('./utils/hbs.helper')
 })
 
 const store = MongoStore({

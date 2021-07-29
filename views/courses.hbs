@@ -11,9 +11,11 @@
                     <i style="font-size:14px;" class="material-icons">Open</i>
                 </a>
                 {{#if @root.isAuth}}
-                    <a href="/courses/{{id}}/edit?allow=true" class="btn-floating halfway-fab waves-effect waves-light red">
-                        <i style="font-size:14px;" class="material-icons">Edit</i>
-                    </a>
+                    {{#ifeq userId._id @root.userId}}
+                        <a href="/courses/{{id}}/edit?allow=true" class="btn-floating halfway-fab waves-effect waves-light red">
+                            <i style="font-size:14px;" class="material-icons">Edit</i>
+                        </a>
+                    {{/ifeq}}
                 {{/if}}
             </div>
             <div class="card-content">
