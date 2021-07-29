@@ -1,10 +1,13 @@
 const {Router} = require('express')
+const crypto = require('crypto')
+const mongoose = require('mongoose')
 const router = Router()
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const keys = require('../keys/index')
 const nodemailer = require('nodemailer')
 const registrationEmail = require('../emails/registration')
+const resetEmail = require('../emails/reset')
 
 let transporter = nodemailer.createTransport(
     {
@@ -80,6 +83,93 @@ router.post('/register', async (req, res) => {
             res.redirect('/auth/login#login')
             await transporter.sendMail(registrationEmail(user.email))
 
+        }
+    } catch(e) {
+        console.log(e);
+    }
+})
+
+router.get('/reset', (req, res) => {
+    res.render('auth/reset', {
+        title: 'Forgot password',
+        error: req.flash('error')
+    })
+})
+
+router.post('/reset', (req, res) => {
+    try {
+        crypto.randomBytes(32, async (err, buffer) => {
+            if (err) {
+                req.flash('error', 'Something went wrong! Please repeat it later!')
+                return res.redirect('/auth/reset')
+            }
+
+            const token = buffer.toString('hex')
+            const candidate = await User.findOne({email: req.body.email})
+
+            if (candidate) {
+                candidate.resetToken = token
+                candidate.resetTokenExp = Date.now() + 60 * 60 * 1000
+                
+                await candidate.save()
+                await transporter.sendMail(resetEmail(candidate.email, token))
+                res.redirect('/auth/login')
+            } else {
+                req.flash('error', 'The email is wrong!')
+                res.redirect('/auth/reset')
+            }
+        })
+
+    } catch(e) {
+        console.log(e);
+    }
+
+})
+
+router.get('/password/:token', async (req, res) => {
+    if (!req.params.token) {
+        return res.redirect('/auth/login')
+    }
+
+    try {
+        const user = await User.findOne({
+            resetToken: req.params.token,
+            resetTokenExp: {$gt: Date.now()}
+        })
+        
+        if (!user) {
+            return res.redirect('/auth/login')
+        } else {
+            res.render('auth/password', {
+                title: 'Access recovery',
+                error: req.flash('error'),
+                userId: user._id.toString('hex'),
+                token: req.params.token
+            })
+        }
+
+    } catch(e) {
+        console.log(e);
+    }
+})
+
+router.post('/password', async (req, res) => {
+    try {
+        // const _id = mongoose.Schema.Types.ObjectId(req.body.userId);
+        const user = await User.findOne({
+            // _id,
+            resetToken: req.body.token,
+            resetTokenExp: {$gt: Date.now()}
+        })
+        if (user) {
+            user.password = await bcrypt.hash(req.body.password, 10)
+            user.resetToken = undefined
+            user.resetToken = undefined
+            await user.save()
+            res.redirect('/auth/login')
+        } else {
+            req.flash('error', 'The token was expired!')
+            res.redirect('/auth/login')
         }
     } catch(e) {
         console.log(e);
