@@ -64,7 +64,9 @@ app.use(helmet({
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "*"],
+        "img-src": ["'self'", "*"],,
+        "style-src": ["'self'", "cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css", "'unsafe-inline'"],
+        "script-src": ["'self'", "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js", "'unsafe-inline'"]
       },
     },
   }))
