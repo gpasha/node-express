@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoStore = require('connect-mongodb-session')(session)
 const flash = require('connect-flash')
+const helmet = require('helmet')
+const compression = require('compression')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 const home = require('./routers/home')
@@ -58,6 +60,15 @@ app.use(fileMiddlewear.single('avatar'))
 
 app.use(csrf())
 app.use(flash())
+app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "*"],
+      },
+    },
+  }))
+app.use(compression())
 app.use(varMiddleware)
 app.use(userMiddleware)
 
